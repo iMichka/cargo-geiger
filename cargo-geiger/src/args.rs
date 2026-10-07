@@ -400,7 +400,7 @@ pub mod args_tests {
         assert!(update_config_result.is_ok());
         assert_eq!(gctx.extra_verbose(), expected_extra_verbose);
         assert_eq!(gctx.shell().verbosity(), expected_shell_verbosity);
-        assert_eq!(gctx.offline(), offline);
+        assert_eq!(gctx.offline_flag(), offline.then_some("--offline"));
         assert!(gctx.target_dir().unwrap().is_none());
     }
 
@@ -427,7 +427,7 @@ pub mod args_tests {
 
         assert!(update_config_result.is_ok());
         assert_eq!(gctx.shell().color_choice(), expected_shell_color_choice);
-        assert_eq!(gctx.offline(), offline);
+        assert_eq!(gctx.offline_flag(), offline.then_some("--offline"));
         assert!(gctx.target_dir().unwrap().is_none());
     }
 
@@ -458,9 +458,15 @@ pub mod args_tests {
         let update_config_result = args.update_config(&mut gctx);
 
         assert!(update_config_result.is_ok());
-        assert_eq!(gctx.frozen(), expected_frozen);
+        let expected_offline_flag = if expected_frozen {
+            Some("--frozen")
+        } else if offline {
+            Some("--offline")
+        } else {
+            None
+        };
+        assert_eq!(gctx.offline_flag(), expected_offline_flag);
         assert_eq!(gctx.lock_update_allowed(), expected_lock_update_allowed);
-        assert_eq!(gctx.offline(), offline);
         assert!(gctx.target_dir().unwrap().is_none());
     }
 }

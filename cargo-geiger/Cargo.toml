@@ -16,7 +16,7 @@ maintenance = { status = "experimental" }
 
 [dependencies]
 anyhow = "1.0.97"
-cargo = "0.86.0"
+cargo = "0.89.0"
 cargo-geiger-serde = { path = "../cargo-geiger-serde", version = "0.3.0" }
 cargo-platform = "0.1.9"
 colored = "3.0.0"
@@ -34,6 +34,10 @@ strum_macros = "0.27.1"
 walkdir = "2.5.0"
 url = "2.5.4"
 cargo-util = "0.2.18"
+
+[target.'cfg(unix)'.dependencies]
+openssl = "0.10.78"
+openssl-sys = "0.9.117"
 
 [features]
 vendored-openssl = ["cargo/vendored-openssl"]
